@@ -1,179 +1,135 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <title>Release Week - Documentação</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f8fafc;
-            color: #1f2937;
-            margin: 0;
-            padding: 40px;
-            line-height: 1.6;
-        }
-        h1, h2, h3 {
-            color: #0f172a;
-        }
-        h1 {
-            border-bottom: 2px solid #e5e7eb;
-            padding-bottom: 10px;
-        }
-        code, pre {
-            background: #0f172a;
-            color: #e5e7eb;
-            padding: 12px;
-            border-radius: 6px;
-            display: block;
-            overflow-x: auto;
-        }
-        ul {
-            padding-left: 20px;
-        }
-        .badge {
-            display: inline-block;
-            background: #e5e7eb;
-            color: #111827;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            margin-right: 6px;
-        }
-        .section {
-            margin-bottom: 40px;
-        }
-        footer {
-            margin-top: 60px;
-            font-size: 14px;
-            color: #6b7280;
-        }
-    </style>
-</head>
-<body>
+# 📋 Release Week
 
-<h1>📋 Release Week</h1>
-
-<p>
-Sistema web desenvolvido em <strong>Laravel 12.x</strong> para documentação e gerenciamento de releases
-(correções e melhorias), com organização por <strong>ano, mês e semana</strong>, controle de status
+Sistema web desenvolvido em **Laravel 12.x** para documentação e gerenciamento de releases  
+(correções e melhorias), com organização por **ano, mês e semana**, controle de status  
 e permissões por perfil de usuário.
-</p>
 
-<div class="section">
-    <h2>🚀 Tecnologias</h2>
-    <ul>
-        <li>Laravel 12.x</li>
-        <li>PHP 8.3.17</li>
-        <li>MySQL</li>
-        <li>Tailwind CSS</li>
-        <li>Laravel Breeze</li>
-        <li>Blade Templates</li>
-    </ul>
-</div>
+---
 
-<div class="section">
-    <h2>🎯 Funcionalidades</h2>
-    <ul>
-        <li>Autenticação com controle de roles (admin e analista)</li>
-        <li>CRUD completo de releases</li>
-        <li>Status: rascunho, em análise e aprovado</li>
-        <li>Upload de imagens (até 2MB)</li>
-        <li>Menu lateral hierárquico (Ano → Mês → Semana)</li>
-        <li>Busca por palavras-chave com filtros combinados</li>
-        <li>Visualização pública apenas de releases aprovadas</li>
-        <li>Layout responsivo</li>
-    </ul>
-</div>
+## 🚀 Tecnologias
 
-<div class="section">
-    <h2>👥 Perfis de Usuário</h2>
-    <p>
-        <span class="badge">Admin</span> acesso total, aprova releases<br>
-        <span class="badge">Analista</span> cria e edita apenas próprias releases<br>
-        <span class="badge">Visitante</span> visualiza somente releases aprovadas
-    </p>
-</div>
+- Laravel 12.x
+- PHP 8.3.17
+- MySQL
+- Tailwind CSS
+- Laravel Breeze
+- Blade Templates
 
-<div class="section">
-    <h2>🗄️ Modelo de Dados (Resumo)</h2>
-    <ul>
-        <li>Releases: número do chamado, agente, descrição, código, data, tipo, ano, mês, semana, status</li>
-        <li>Usuários: nome, email, senha, role</li>
-    </ul>
-</div>
+---
 
-<div class="section">
-    <h2>⚙️ Instalação</h2>
+## 🎯 Funcionalidades
 
-    <h3>Pré-requisitos</h3>
-    <ul>
-        <li>PHP 8.3+</li>
-        <li>Composer</li>
-        <li>Node.js + NPM</li>
-        <li>MySQL</li>
-    </ul>
+- Autenticação com controle de roles (**admin** e **analista**)
+- CRUD completo de releases
+- Status das releases:
+  - 📝 Rascunho
+  - 🔍 Em análise
+  - ✅ Aprovado
+- Upload de imagens (até 2MB)
+- Menu lateral hierárquico (**Ano → Mês → Semana**)
+- Busca por palavras-chave com filtros combinados
+- Visualização pública apenas de releases aprovadas
+- Layout responsivo (desktop, tablet e mobile)
 
-    <h3>Clonar o projeto</h3>
-    <pre>git clone https://github.com/seu-usuario/release-week.git
-cd release-week</pre>
+---
 
-    <h3>Instalar dependências</h3>
-    <pre>composer install
+## 👥 Perfis de Usuário
+
+- **Admin**  
+  Acesso total ao sistema, pode aprovar releases
+
+- **Analista**  
+  Cria e edita apenas as próprias releases
+
+- **Visitante**  
+  Visualiza somente releases aprovadas
+
+---
+
+## 🗄️ Modelo de Dados (Resumo)
+
+### Releases
+- Número do chamado
+- Agente
+- Descrição
+- Código da release
+- Data de liberação
+- Tipo (Correção | Melhoria)
+- Ano / Mês / Semana
+- Status
+- Imagem (opcional)
+- Link de manual (opcional)
+
+### Usuários
+- Nome
+- Email
+- Senha
+- Role (`admin` | `analista`)
+
+---
+
+## ⚙️ Instalação
+
+### Pré-requisitos
+- PHP 8.3+
+- Composer
+- Node.js + NPM
+- MySQL
+
+---
+
+### Clonar o projeto
+```bash
+git clone https://github.com/seu-usuario/release-week.git
+cd release-week
+Instalar dependências
+bash
+Copiar código
+composer install
 npm install
-npm run build</pre>
-
-    <h3>Configurar ambiente (.env)</h3>
-    <pre>DB_CONNECTION=mysql
+npm run build
+Configurar ambiente (.env)
+env
+Copiar código
+DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=release_week_db
 DB_USERNAME=root
-DB_PASSWORD=</pre>
+DB_PASSWORD=
+Crie o banco de dados antes de continuar.
 
-    <h3>Migrar banco</h3>
-    <pre>php artisan migrate</pre>
+Migrar banco
+bash
+Copiar código
+php artisan migrate
+Configurar storage
+bash
+Copiar código
+php artisan storage:link
+Rodar aplicação
+bash
+Copiar código
+php artisan serve
+Acesse:
 
-    <h3>Configurar storage</h3>
-    <pre>php artisan storage:link</pre>
+arduino
+Copiar código
+http://localhost:8000
+🔐 Usuários de Teste
+Admin
+Email: admin@releaseweek.com
 
-    <h3>Rodar aplicação</h3>
-    <pre>php artisan serve</pre>
+Senha: 12345678
 
-    <p>Acesse: <strong>http://localhost:8000</strong></p>
-</div>
+Analista
+Email: analista@releaseweek.com
 
-<div class="section">
-    <h2>🔐 Usuários de Teste</h2>
+Senha: 12345678
 
-    <p><strong>Admin</strong><br>
-    Email: admin@releaseweek.com<br>
-    Senha: 12345678</p>
-
-    <p><strong>Analista</strong><br>
-    Email: analista@releaseweek.com<br>
-    Senha: 12345678</p>
-</div>
-
-<div class="section">
-    <h2>🔧 Comandos Úteis</h2>
-    <pre>php artisan optimize:clear
+🔧 Comandos Úteis
+bash
+Copiar código
+php artisan optimize:clear
 php artisan route:list
-npm run dev</pre>
-</div>
-
-<div class="section">
-    <h2>🐛 Problemas Comuns</h2>
-    <ul>
-        <li>Imagens não carregam → <code>php artisan storage:link</code></li>
-        <li>Erro 404 → <code>php artisan route:clear</code></li>
-        <li>Menu vazio → verificar releases aprovadas</li>
-    </ul>
-</div>
-
-<footer>
-    <p></p>
-</footer>
-
-</body>
-</html>
+npm run dev
