@@ -4,16 +4,19 @@ use App\Http\Controllers\ReleaseController;
 use App\Http\Controllers\Admin\ReleaseController as AdminReleaseController;
 use Illuminate\Support\Facades\Route;
 
+// Nova Home Page
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('home');
+})->name('home');
+
+// Redirecionar /releases para home também
+Route::get('/releases', [ReleaseController::class, 'index'])->name('releases.index');
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    return redirect()->route('home');
+});
 
 // Rotas públicas
-Route::get('/releases', [ReleaseController::class, 'index'])->name('releases.index');
 Route::get('/releases/{release}', [ReleaseController::class, 'show'])->name('releases.show');
 
 // Rotas protegidas para usuários autenticados
