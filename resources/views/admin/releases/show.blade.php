@@ -1,162 +1,233 @@
-<x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Detalhes da Release (Admin)
-            </h2>
-            <div class="flex items-center space-x-3">
-                <a href="{{ route('admin.releases.edit', $release) }}" 
-                   class="inline-flex items-center px-4 py-2 bg-yellow-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-yellow-700">
-                    ✏️ Editar
-                </a>
-                <a href="{{ route('admin.releases.index') }}" 
-                   class="text-sm text-gray-600 hover:text-gray-900">
-                    ← Voltar
-                </a>
+@extends('layouts.app')
+
+@section('title', 'Detalhes da Release')
+
+@section('content')
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Detalhes da Release: {{ $release->release_codigo }}
+                </h1>
+                <div>
+                    <a href="{{ route('admin.releases.edit', $release) }}" class="btn btn-warning me-2">
+                        <i class="fas fa-edit me-1"></i> Editar
+                    </a>
+                    <a href="{{ route('admin.releases.index') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-1"></i> Voltar
+                    </a>
+                </div>
             </div>
         </div>
-    </x-slot>
+    </div>
 
-    <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    <!-- Header Info -->
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
-                        <div>
-                            <h1 class="text-2xl font-bold text-gray-900">{{ $release->release_codigo }}</h1>
-                            <div class="flex items-center space-x-3 mt-2">
-                                <span class="px-3 py-1 rounded-full text-sm font-semibold release-status-{{ $release->status }}">
-                                    {{ ucfirst(str_replace('_', ' ', $release->status)) }}
-                                </span>
-                                <span class="px-3 py-1 rounded-full text-sm font-semibold 
-                                    {{ $release->tipo_chamada == 'Correção' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800' }}">
-                                    {{ $release->tipo_chamada }}
-                                </span>
-                            </div>
+    <!-- Badges de status -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge bg-{{ $release->status == 'aprovado' ? 'success' : ($release->status == 'em_analise' ? 'warning' : 'secondary') }} fs-6">
+                    {{ ucfirst(str_replace('_', ' ', $release->status)) }}
+                </span>
+                <span class="badge bg-{{ $release->tipo_chamada == 'Correção' ? 'danger' : 'success' }} fs-6">
+                    {{ $release->tipo_chamada }}
+                </span>
+                <span class="badge bg-info fs-6">
+                    Semana {{ $release->semana }} - {{ $release->mes }}/{{ $release->ano }}
+                </span>
+                @if($release->user)
+                    <span class="badge bg-dark fs-6">
+                        <i class="fas fa-user me-1"></i> {{ $release->user->name }}
+                    </span>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Informações principais -->
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Informações da Chamada
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width: 15%">Chamada</th>
+                                    <th style="width: 15%">Agente</th>
+                                    <th style="width: 30%">Descrição</th>
+                                    <th style="width: 15%">Release</th>
+                                    <th style="width: 15%">Liberação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>{{ $release->numero_chamado }}</strong></td>
+                                    <td>{{ $release->agente }}</td>
+                                    <td>{{ $release->descricao }}</td>
+                                    <td><span class="badge bg-primary fs-6">{{ $release->release_codigo }}</span></td>
+                                    <td>{{ \Carbon\Carbon::parse($release->data_liberacao)->format('d/m/Y') }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Descrições -->
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">
+                                <i class="fas fa-align-left me-2"></i>
+                                Descrição
+                            </h5>
                         </div>
-                        <div class="mt-4 md:mt-0 text-right">
-                            <p class="text-sm text-gray-500">Criado por</p>
-                            <p class="text-lg font-semibold text-gray-900">{{ $release->user->name }}</p>
-                            <p class="text-sm text-gray-500">
-                                {{ \Carbon\Carbon::parse($release->created_at)->format('d/m/Y H:i') }}
-                            </p>
+                        <div class="card-body">
+                            <p class="card-text">{{ $release->descricao }}</p>
                         </div>
                     </div>
-
-                    <!-- Quick Stats -->
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                        <div class="bg-gray-50 p-4 rounded-lg">
-                            <p class="text-sm text-gray-600">Chamado</p>
-                            <p class="text-lg font-semibold text-gray-900">{{ $release->numero_chamado }}</p>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">
+                                <i class="fas fa-tools me-2"></i>
+                                Descrição da Correção/Melhoria
+                            </h5>
                         </div>
-                        <div class="bg-blue-50 p-4 rounded-lg">
-                            <p class="text-sm text-blue-600">Agente</p>
-                            <p class="text-lg font-semibold text-blue-900">{{ $release->agente }}</p>
-                        </div>
-                        <div class="bg-green-50 p-4 rounded-lg">
-                            <p class="text-sm text-green-600">Data Liberação</p>
-                            <p class="text-lg font-semibold text-green-900">
-                                {{ \Carbon\Carbon::parse($release->data_liberacao)->format('d/m/Y') }}
-                            </p>
-                        </div>
-                        <div class="bg-purple-50 p-4 rounded-lg">
-                            <p class="text-sm text-purple-600">Período</p>
-                            <p class="text-lg font-semibold text-purple-900">
-                                S{{ $release->semana }} - {{ $release->mes }}/{{ $release->ano }}
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Main Content -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <!-- Left Column -->
-                        <div class="md:col-span-2 space-y-6">
-                            <!-- Description -->
-                            <div>
-                                <h3 class="text-lg font-medium text-gray-900 mb-2">Descrição</h3>
-                                <div class="bg-gray-50 p-4 rounded-lg">
-                                    <p class="text-gray-700 whitespace-pre-line">{{ $release->descricao }}</p>
-                                </div>
-                            </div>
-                            
-                            <!-- Correction Description -->
-                            <div>
-                                <h3 class="text-lg font-medium text-gray-900 mb-2">Descrição da Correção/Melhoria</h3>
-                                <div class="bg-gray-50 p-4 rounded-lg">
-                                    <p class="text-gray-700 whitespace-pre-line">{{ $release->descricao_correcao }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Right Column -->
-                        <div class="space-y-6">
-                            <!-- Manual Link -->
-                            <div>
-                                <h3 class="text-lg font-medium text-gray-900 mb-2">Link do Manual</h3>
-                                @if($release->link_manual)
-                                    <a href="{{ $release->link_manual }}" 
-                                       target="_blank"
-                                       class="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-800 rounded-md hover:bg-blue-200">
-                                        🔗 Acessar Manual
-                                    </a>
-                                @else
-                                    <p class="text-gray-500 italic">Nenhum link fornecido</p>
-                                @endif
-                            </div>
-                            
-                            <!-- Image -->
-                            @if($release->imagem)
-                                <div>
-                                    <h3 class="text-lg font-medium text-gray-900 mb-2">Imagem</h3>
-                                    <div class="border rounded-lg overflow-hidden">
-                                        <img src="{{ asset('storage/' . $release->imagem) }}" 
-                                             alt="Imagem da release"
-                                             class="w-full h-auto">
-                                    </div>
-                                </div>
-                            @endif
-                            
-                            <!-- Admin Actions -->
-                            @if(auth()->user()->isAdmin())
-                                <div class="pt-4 border-t">
-                                    <h3 class="text-lg font-medium text-gray-900 mb-3">Alterar Status</h3>
-                                    <form action="{{ route('admin.releases.status', $release) }}" 
-                                          method="POST" 
-                                          class="space-y-3">
-                                        @csrf
-                                        <div class="flex space-x-2">
-                                            <select name="status" 
-                                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                                <option value="rascunho" {{ $release->status == 'rascunho' ? 'selected' : '' }}>Rascunho</option>
-                                                <option value="em_analise" {{ $release->status == 'em_analise' ? 'selected' : '' }}>Em Análise</option>
-                                                <option value="aprovado" {{ $release->status == 'aprovado' ? 'selected' : '' }}>Aprovado</option>
-                                            </select>
-                                            <button type="submit" 
-                                                    class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700">
-                                                Alterar
-                                            </button>
-                                        </div>
-                                    </form>
-                                    
-                                    <!-- Delete Button -->
-                                    <form action="{{ route('admin.releases.destroy', $release) }}" 
-                                          method="POST" 
-                                          class="mt-4"
-                                          onsubmit="return confirm('Excluir permanentemente?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" 
-                                                class="w-full inline-flex justify-center items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700">
-                                            🗑️ Excluir Permanentemente
-                                        </button>
-                                    </form>
-                                </div>
-                            @endif
+                        <div class="card-body">
+                            <p class="card-text">{{ $release->descricao_correcao }}</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Sidebar com informações adicionais -->
+        <div class="col-md-4">
+            <!-- Link do Manual -->
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <i class="fas fa-book me-2"></i>
+                        Documentação
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @if($release->link_manual)
+                        <div class="alert alert-primary">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-external-link-alt fa-2x me-3"></i>
+                                <div>
+                                    <strong>Manual de Configuração</strong>
+                                    <div class="mt-1">
+                                        <a href="{{ $release->link_manual }}" target="_blank" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-external-link-alt me-1"></i> Acessar Link
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @else
+                        <div class="alert alert-secondary">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Nenhum link de documentação disponível.
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Imagem -->
+            @if($release->imagem)
+                <div class="card mb-4">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">
+                            <i class="fas fa-image me-2"></i>
+                            Tela_01
+                        </h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <a href="{{ asset('storage/' . $release->imagem) }}" target="_blank">
+                            <img src="{{ asset('storage/' . $release->imagem) }}" 
+                                 alt="Imagem da release" 
+                                 class="img-fluid rounded border"
+                                 style="max-height: 300px;">
+                        </a>
+                        <p class="text-muted small mt-2">
+                            <i class="fas fa-mouse-pointer me-1"></i>
+                            Clique na imagem para ampliar
+                        </p>
+                    </div>
+                </div>
+            @endif
+
+            <!-- Ações administrativas -->
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <i class="fas fa-cog me-2"></i>
+                        Ações Administrativas
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <!-- Alterar Status -->
+                    <form action="{{ route('admin.releases.status', $release) }}" method="POST" class="mb-3">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="status" class="form-label"><strong>Alterar Status</strong></label>
+                            <select name="status" id="status" class="form-select">
+                                <option value="rascunho" {{ $release->status == 'rascunho' ? 'selected' : '' }}>📝 Rascunho</option>
+                                <option value="em_analise" {{ $release->status == 'em_analise' ? 'selected' : '' }}>🔍 Em Análise</option>
+                                <option value="aprovado" {{ $release->status == 'aprovado' ? 'selected' : '' }}>✅ Aprovado</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-sync-alt me-1"></i> Alterar Status
+                        </button>
+                    </form>
+
+                    <!-- Excluir Release -->
+                    <form action="{{ route('admin.releases.destroy', $release) }}" method="POST" 
+                          onsubmit="return confirm('Tem certeza que deseja excluir esta release? Esta ação não pode ser desfeita.');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger w-100">
+                            <i class="fas fa-trash-alt me-1"></i> Excluir Release
+                        </button>
+                    </form>
+
+                    <!-- Metadados -->
+                    <div class="mt-4 pt-3 border-top">
+                        <h6 class="text-muted mb-2">Metadados</h6>
+                        <ul class="list-unstyled small">
+                            <li class="mb-1">
+                                <i class="far fa-calendar me-2"></i>
+                                <strong>Criado em:</strong> 
+                                {{ \Carbon\Carbon::parse($release->created_at)->format('d/m/Y H:i') }}
+                            </li>
+                            <li class="mb-1">
+                                <i class="far fa-calendar-check me-2"></i>
+                                <strong>Atualizado em:</strong> 
+                                {{ \Carbon\Carbon::parse($release->updated_at)->format('d/m/Y H:i') }}
+                            </li>
+                            <li>
+                                <i class="fas fa-id-badge me-2"></i>
+                                <strong>ID:</strong> {{ $release->id }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</x-app-layout>
+</div>
+@endsection

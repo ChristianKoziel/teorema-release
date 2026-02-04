@@ -5,23 +5,29 @@
             <!-- Lado Esquerdo: Logo e Nome -->
             <div class="flex items-center">
                 <!-- Logo Teorema -->
+                <!-- Logo Teorema -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('releases.index') }}" class="flex items-center space-x-3">
-                        <!-- Substitua por sua logo ou use texto -->
-                        <div class="h-10 w-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                            <span class="text-white font-bold text-lg">T</span>
-                        </div>
-                        <span class="text-xl font-bold text-gray-800">TEOREMA</span>
+                    <a href="{{ route('home') }}" class="flex items-center space-x-3">
+                        @if(file_exists(public_path('logo-black-2x.png')))
+                            <img src="{{ asset('logo-black-2x.png') }}" 
+                                alt="Teorema Sistemas" 
+                                class="h-10 w-auto">
+                            {{-- <span class="text-xl font-bold text-gray-800 hidden sm:inline">TEOREMA</span> --}}
+                        @else
+                            <!-- Fallback design -->
+                            <div class="h-10 w-10 bg-gradient-to-br from-[#0053c5] to-[#5afd01] rounded-lg flex items-center justify-center">
+                                <span class="text-white font-bold text-lg">T</span>
+                            </div>
+                            <span class="text-xl font-bold text-gray-800">TEOREMA</span>
+                        @endif
                     </a>
                 </div>
-
                 <!-- Menu Central: Apenas Home -->
                 <div class="hidden sm:flex sm:items-center sm:ms-10">
-                    <x-nav-link :href="route('releases.index')" :active="request()->routeIs('releases.index')">
+                    <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
                         🏠 Home
                     </x-nav-link>
                 </div>
-            </div>
 
             <!-- Centro: Barra de Pesquisa -->
             <div class="flex-1 max-w-2xl mx-4">
